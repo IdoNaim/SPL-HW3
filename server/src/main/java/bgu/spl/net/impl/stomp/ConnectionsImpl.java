@@ -1,7 +1,10 @@
-package bgu.spl.net.srv;
+package bgu.spl.net.impl.stomp;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import bgu.spl.net.srv.ConnectionHandler;
+import bgu.spl.net.srv.Connections;
 
 public class ConnectionsImpl<T> implements Connections<T> {
 
