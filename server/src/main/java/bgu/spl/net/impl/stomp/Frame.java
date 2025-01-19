@@ -4,13 +4,13 @@ import bgu.spl.net.srv.Connections;
 import java.util.HashMap;
 
 public abstract class Frame{
-    private String command;
-    private HashMap<String,String> headers;
-    private String body;
+    protected String command;
+    protected HashMap<String,String> headers;
+    protected String body;
     public Frame(){
         headers = new HashMap<>();
     }
-    public void editFrame(String msg){
+    public void initFrame(String msg){
         System.out.println(msg);
         String[] message = msg.split("\n");
         command = message[0];
@@ -24,7 +24,7 @@ public abstract class Frame{
         }
         body = message[i+1];
 
-    // }
+     }
     // public static Frame createFrame(String message){
     //     Frame result = new Frame();
     //     try{
@@ -35,6 +35,5 @@ public abstract class Frame{
     //         return null;
     //     }
     // }
-    public abstract Frame creatFrame(String message);
     public abstract void process(Connections<String> connections);
 }

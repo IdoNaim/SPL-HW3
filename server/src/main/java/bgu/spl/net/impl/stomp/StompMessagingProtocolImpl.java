@@ -22,12 +22,34 @@ public class StompMessagingProtocolImpl implements StompMessagingProtocol<String
     
     public void process(String message){
         //TODO: impelement
-        Frame frame = Frame.createFrame(message);
-        if(frame == null){
-            //message isnt in format maybe wouldnt even get here
+        String command = message.split("\n")[0];
+        if(command.equals("CONNECT")){
+            ConnectFrame frame = new ConnectFrame();
+            frame.initFrame(message);
+            frame.process(connections);
+
+        }else if(command.equals("DISCONNECT")){
+            DisconnectFrame frame = new DisconnectFrame();
+            frame.initFrame(message);
+            frame.process(connections);
+
+        }else if(command.equals("SUBSCRIBE")){
+            SubscribeFrame frame = new SubscribeFrame();
+            frame.initFrame(message);
+            frame.process(connections);
+
+        }else if(command.equals("UNSUBSCRIBE")){
+            UnsubscribeFrame frame = new UnsubscribeFrame();
+            frame.initFrame(message);
+            frame.process(connections);
+
+        }else if(command.equals("SEND")){
+            SendFrame frame = new SendFrame();
+            frame.initFrame(message);
+            frame.process(connections);
         }
         else{
-            frame.process(connections);
+           //figure out what to do in error
         }
         
 
