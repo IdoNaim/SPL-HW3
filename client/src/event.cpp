@@ -74,7 +74,7 @@ Event::Event(const std::string &frame_body): channel_name(""), city(""),
     while(getline(ss,line,'\n')){
         vector<string> lineArgs;
         if(line.find(':') != string::npos) {
-            keyboardInput::split_str(line, ':', lineArgs); // changed split_str(line, ':', lineArgs);
+            split_str(line, ':', lineArgs); // changed split_str(line, ':', lineArgs);
             string key = lineArgs.at(0);
             string val;
             if(lineArgs.size() == 2) {
@@ -143,4 +143,22 @@ names_and_events parseEventsFile(std::string json_path)
     names_and_events events_and_names{channel_name, events};
 
     return events_and_names;
+}
+
+void Event::split_str(std::string message, char divider, std::vector<std::string>& vector){
+    std::string slot1 ="";
+    vector.clear();
+    for(int i=0; i<message.size();i++){
+        if(message[i]==divider){
+            vector.push_back(slot1);
+            if(!(i+1>=message.size())){
+                vector.push_back(message.substr(i+1, message.size()));
+            }
+            return;
+        }
+        else{
+            slot1 = slot1 + message[i];
+        }
+    }
+    vector.push_back(slot1);    
 }
