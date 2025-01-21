@@ -12,7 +12,8 @@ public class ConnectionsImpl<T> implements Connections<T> {
     private ConcurrentHashMap<Integer, ConnectionHandler<T>> activeUsers;
     private ConcurrentHashMap<String, List<Integer>> subscribtions;
     private ConcurrentHashMap<String, String> userNameToPasscode;
-    private ConcurrentHashMap<Integer,ConcurrentHashMap<String, Integer>> connectionIdChannelToSubscribtionId;
+    private ConcurrentHashMap<Integer,List<Pair<String,Integer>>> connectionIdChannelToSubscribtionId;
+
     private ConcurrentHashMap<String, Integer> userNameToConnectionId; //maybe unneeded
     private int index;
     public ConnectionsImpl(){
@@ -47,7 +48,7 @@ public class ConnectionsImpl<T> implements Connections<T> {
             for (Integer user : list) {
                 String stompMessage = 
                 "MESSAGE"+'\n'+
-                "subscribtion:" + connectionIdChannelToSubscribtionId.get(user).get(channel)+'\n'+
+                "subscribtion:" + connectionIdChannelToSubscribtionId.get(user).getFirst()+'\n'+
                 "message-id:"+ index +'\n'+
                 "destination:/"+channel+'\n'+
                 ""+'\n'+
@@ -80,7 +81,11 @@ public class ConnectionsImpl<T> implements Connections<T> {
             subscribtions.putIfAbsent(channel, new ArrayList<Integer>());
         }
         subscribtions.get(channel).add(connectionId);
-        connectionIdChannelToSubscribtionId.get(connectionId).putIfAbsent(channel, intSubId);
+        if(!connectionIdChannelToSubscribtionId.containsKey(connectionId)){
+            connectionIdChannelToSubscribtionId.putIfAbsent(connectionId, new ArrayList<Pair<String,Integer>>());
+        }
+        Pair<String,Integer> pair = new Pair<String,Integer>(channel, intSubId);
+        connectionIdChannelToSubscribtionId.get(connectionId).add(pair);
         }catch(Exception e){
         String errorMsg = 
         "ERROR"+'\n'+
@@ -96,7 +101,8 @@ public class ConnectionsImpl<T> implements Connections<T> {
         }
     }
     public void unsubscribe(String subId, int connectionId){
-        
+        int intSubId = Integer.parseInt(subId);
+        string 
     }
 
 }
