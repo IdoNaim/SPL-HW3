@@ -104,6 +104,8 @@ public class ConnectionsImpl<T> implements Connections<T> {
         int intSubId = Integer.parseInt(subId);
         Pair<String,Integer> pair = getPairbySubId(intSubId, connectionId);
         String channel = pair.getFirst();
+        subscribtions.get(channel).remove(connectionId);
+        connectionIdChannelToSubscribtionId.get(connectionId).remove(pair);
     }
     public Pair<String,Integer> getPairbySubId(int subId, int connectionId){
         List<Pair<String,Integer>> list = connectionIdChannelToSubscribtionId.get(connectionId);
