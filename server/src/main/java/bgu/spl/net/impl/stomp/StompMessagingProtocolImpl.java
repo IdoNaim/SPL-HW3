@@ -31,6 +31,7 @@ public class StompMessagingProtocolImpl implements StompMessagingProtocol<String
             DisconnectFrame frame = new DisconnectFrame(this.connectionId);
             frame.initFrame(message);
             frame.process(connections);
+            shouldTerminate = true;
 
         }else if(command.equals("SUBSCRIBE")){
             SubscribeFrame frame = new SubscribeFrame(this.connectionId);
@@ -57,7 +58,9 @@ public class StompMessagingProtocolImpl implements StompMessagingProtocol<String
            message+'\n'+
            "----"+'\n'+
            '\u0000';
-           connections.sendError(errorMsg);
+           connections.send(connectionId,errorMsg);
+           shouldTerminate = true;
+
         }
         
 
