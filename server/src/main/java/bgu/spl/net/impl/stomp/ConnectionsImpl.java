@@ -81,7 +81,7 @@ public class ConnectionsImpl<T> implements Connections<T> {
         }
         subscribtions.get(channel).add(connectionId);
         connectionIdChannelToSubscribtionId.get(connectionId).putIfAbsent(channel, intSubId);
-    }catch(Exception e){
+        }catch(Exception e){
         String errorMsg = 
         "ERROR"+'\n'+
         "message:unable to subscribe"+'\n'+
@@ -93,7 +93,10 @@ public class ConnectionsImpl<T> implements Connections<T> {
         "----"+'\n'+
         "got an Exception when trying to subscribe client number "+ connectionId+ " to channel "+ channel;
         send(connectionId, errorMsg);
+        }
     }
+    public void unsubscribe(String subId, int connectionId){
+        
     }
 
 }
