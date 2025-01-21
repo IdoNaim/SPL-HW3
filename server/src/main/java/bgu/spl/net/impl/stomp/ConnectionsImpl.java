@@ -24,11 +24,10 @@ public class ConnectionsImpl<T> implements Connections<T> {
         connectionIdChannelToSubscribtionId = new ConcurrentHashMap<>();
         index = 0; 
     }
-    // public int connect(ConnectionHandler<T> ch){
-    //     // activeUsers.putIfAbsent(index, ch);
-    //     // index++;
-    //     // return index-1;
-    // }
+    public void connect(String userName,String password, int connectionId){
+        //TODO: implement
+    }
+
     public boolean send(int connectionId, T msg){
         //TODO: implement
         try{
@@ -70,9 +69,9 @@ public class ConnectionsImpl<T> implements Connections<T> {
         }
     }
 
-    public void disconnect(int connectionId){
+    public void disconnect(int connectionId, String receipt){
         //TODO: implement
-        //activeUsers.remove(connectionId);
+
     }
     public void subscribe(String channel, String subscribtionId, int connectionId){
         try{

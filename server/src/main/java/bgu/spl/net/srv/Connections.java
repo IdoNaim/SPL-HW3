@@ -9,4 +9,8 @@ public interface Connections<T> {
     void send(String channel, T msg);
 
     void disconnect(int connectionId);
+    void subscribe(String channel, String subscribtionId, int connectionId);
+    void unsubscribe(String subId, int connectionId);
+    void connect(String userName, String password, int connectionId);
+    void disconnect(int connectionId, String receipt);
 }

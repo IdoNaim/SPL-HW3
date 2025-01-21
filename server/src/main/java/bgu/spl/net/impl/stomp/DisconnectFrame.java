@@ -7,6 +7,6 @@ public class DisconnectFrame extends Frame{
     }
     public void process(Connections<String> connections){
         String reciept = headers.get("receipt");
-        connection.disconnect(this.connectionId, reciept);
+        connections.disconnect(this.connectionId, reciept);
     }
 }
