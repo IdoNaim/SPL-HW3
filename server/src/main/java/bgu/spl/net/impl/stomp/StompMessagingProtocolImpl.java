@@ -8,7 +8,6 @@ import bgu.spl.net.srv.Connections;
 public class StompMessagingProtocolImpl implements StompMessagingProtocol<String> {
 
     private boolean shouldTerminate = false;
-    private ConcurrentHashMap<String, Runnable> commands;
     private Connections<String> connections;
     private int connectionId;
 

@@ -4,6 +4,7 @@ import bgu.spl.net.srv.Connections;
 import java.util.HashMap;
 
 public abstract class Frame{
+    protected String ogMessage;
     protected String command;
     protected HashMap<String,String> headers;
     protected String body;
@@ -11,6 +12,7 @@ public abstract class Frame{
         headers = new HashMap<>();
     }
     public void initFrame(String msg){
+        ogMessage= msg.substring(0,msg.length()-1);
         System.out.println(msg);
         String[] message = msg.split("\n");
         command = message[0];
