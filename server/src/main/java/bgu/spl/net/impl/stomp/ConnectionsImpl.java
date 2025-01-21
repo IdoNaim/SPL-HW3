@@ -1,5 +1,6 @@
 package bgu.spl.net.impl.stomp;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -52,7 +53,7 @@ public class ConnectionsImpl<T> implements Connections<T> {
                 ""+'\n'+
                 msg+'\n'+
                 '\u0000';
-                send(user, msg);
+                send(user, stompMessage);
             }
             index ++;
         }else{
@@ -72,8 +73,27 @@ public class ConnectionsImpl<T> implements Connections<T> {
         //TODO: implement
         //activeUsers.remove(connectionId);
     }
-    public String createError(String body){
-
+    public void subscribe(String channel, String subscribtionId, int connectionId){
+        try{
+        int intSubId = Integer.parseInt(subscribtionId);
+        if(!subscribtions.containsKey(channel)){
+            subscribtions.putIfAbsent(channel, new ArrayList<Integer>());
+        }
+        subscribtions.get(channel).add(connectionId);
+        connectionIdChannelToSubscribtionId.get(connectionId).putIfAbsent(channel, intSubId);
+    }catch(Exception e){
+        String errorMsg = 
+        "ERROR"+'\n'+
+        "message:unable to subscribe"+'\n'+
+        ""+'\n'+
+        "The Erro:"+'\n'+
+        "----"+'\n'+
+        "message:"+'\n'+
+        e.getMessage()+'\n'+
+        "----"+'\n'+
+        "got an Exception when trying to subscribe client number "+ connectionId+ " to channel "+ channel;
+        send(connectionId, errorMsg);
+    }
     }
 
 }
