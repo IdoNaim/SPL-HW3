@@ -102,7 +102,17 @@ public class ConnectionsImpl<T> implements Connections<T> {
     }
     public void unsubscribe(String subId, int connectionId){
         int intSubId = Integer.parseInt(subId);
-        string 
+        Pair<String,Integer> pair = getPairbySubId(intSubId, connectionId);
+        String channel = pair.getFirst();
+    }
+    public Pair<String,Integer> getPairbySubId(int subId, int connectionId){
+        List<Pair<String,Integer>> list = connectionIdChannelToSubscribtionId.get(connectionId);
+        for(Pair<String,Integer> pair:list){
+            if(pair.getSecond() == subId ){
+                return pair;
+            }
+        }
+        return null;
     }
 
 }
