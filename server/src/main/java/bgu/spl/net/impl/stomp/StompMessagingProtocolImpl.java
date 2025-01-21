@@ -23,32 +23,41 @@ public class StompMessagingProtocolImpl implements StompMessagingProtocol<String
         //TODO: impelement
         String command = message.split("\n")[0];
         if(command.equals("CONNECT")){
-            ConnectFrame frame = new ConnectFrame();
+            ConnectFrame frame = new ConnectFrame(this.connectionId);
             frame.initFrame(message);
             frame.process(connections);
 
         }else if(command.equals("DISCONNECT")){
-            DisconnectFrame frame = new DisconnectFrame();
+            DisconnectFrame frame = new DisconnectFrame(this.connectionId);
             frame.initFrame(message);
             frame.process(connections);
 
         }else if(command.equals("SUBSCRIBE")){
-            SubscribeFrame frame = new SubscribeFrame();
+            SubscribeFrame frame = new SubscribeFrame(this.connectionId);
             frame.initFrame(message);
             frame.process(connections);
 
         }else if(command.equals("UNSUBSCRIBE")){
-            UnsubscribeFrame frame = new UnsubscribeFrame();
+            UnsubscribeFrame frame = new UnsubscribeFrame(this.connectionId);
             frame.initFrame(message);
             frame.process(connections);
 
         }else if(command.equals("SEND")){
-            SendFrame frame = new SendFrame();
+            SendFrame frame = new SendFrame(this.connectionId);
             frame.initFrame(message);
             frame.process(connections);
         }
         else{
            //figure out what to do in error
+           String errorMsg=
+           "message:malformed frame recieved"+'\n'+
+           ""+'\n'+
+           "The message: "+'\n'+
+           "----"+'\n'+
+           message+'\n'+
+           "----"+'\n'+
+           '\u0000';
+           connections.sendError(errorMsg);
         }
         
 

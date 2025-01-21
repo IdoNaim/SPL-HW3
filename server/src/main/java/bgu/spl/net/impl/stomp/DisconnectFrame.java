@@ -2,10 +2,11 @@ package bgu.spl.net.impl.stomp;
 import bgu.spl.net.srv.Connections;
 
 public class DisconnectFrame extends Frame{
-    public DisconnectFrame(){
-        super();
+    public DisconnectFrame(int connectionId){
+        super(connectionId);
     }
     public void process(Connections<String> connections){
-
+        String reciept = headers.get("receipt");
+        connection.disconnect(this.connectionId, reciept);
     }
 }

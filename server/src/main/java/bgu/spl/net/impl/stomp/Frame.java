@@ -8,7 +8,9 @@ public abstract class Frame{
     protected String command;
     protected HashMap<String,String> headers;
     protected String body;
-    public Frame(){
+    protected int connectionId;
+    public Frame(int connectionId){
+        this.connectionId = connectionId;
         headers = new HashMap<>();
     }
     public void initFrame(String msg){

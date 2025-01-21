@@ -3,8 +3,8 @@ package bgu.spl.net.impl.stomp;
 import bgu.spl.net.srv.Connections;
 
 public class SubscribeFrame extends Frame {
-    public SubscribeFrame(){
-        super();
+    public SubscribeFrame(int connectionId){
+        super(connectionId);
     }
 
     @Override
@@ -14,8 +14,8 @@ public class SubscribeFrame extends Frame {
         String destination = headers.get("destination");
         //assuming destination is like /topic/police:
         String[] destArray = destination.split("/"); //should hold [,topic , police]
-        String id = headers.get("id");
-        connections.subscribe(destArray[2], id , )
+        String subscriptionId = headers.get("id");
+        connections.subscribe(destArray[2], subscriptionId, this.connectionId);
 
     }
     

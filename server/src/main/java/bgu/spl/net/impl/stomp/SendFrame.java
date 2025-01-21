@@ -3,8 +3,8 @@ package bgu.spl.net.impl.stomp;
 import bgu.spl.net.srv.Connections;
 
 public class SendFrame extends Frame {
-    public SendFrame(){
-        super();
+    public SendFrame(int connectionId){
+        super(connectionId);
     }
 
     @Override

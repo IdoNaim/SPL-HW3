@@ -3,8 +3,8 @@ package bgu.spl.net.impl.stomp;
 import bgu.spl.net.srv.Connections;
 
 public class ConnectFrame extends Frame {
-    public ConnectFrame(){
-        super();
+    public ConnectFrame(int connectionId){
+        super(connectionId);
     }
     @Override
     public void process(Connections<String> connections) {
@@ -12,26 +12,30 @@ public class ConnectFrame extends Frame {
         //throw new UnsupportedOperationException("Unimplemented method 'process'");
         String userName = headers.get("login");
         String password = headers.get("passcode");
-        if(!connections.userExists(userName)){
-            connections.connect(userName,password);
+        connections.connect(userName,password, this.connectionId);
 
-        }
-        else{
-            if(connections.getPassword(userName).equals(password)){
-                connections.connect(userName,password);
-            }
-            else{
-                String errorMsg=
-                "message: Password does not match UserName"+'\n'+
-                ""+'\n'+
-                "The message:"+'\n'+
-                "----"+'\n'+
-                this.ogMessage+'\n'+
-                "----"+'\n'+
-                "User "+userName+"'s password is deifferent than what you inserted";
-                ;
-            }
-        }
+        
+        // if(!connections.userExists(userName)){
+        //     connections.connect(userName,password);
+
+        // }
+        // else{
+        //     if(connections.getPassword(userName).equals(password)){
+        //         connections.connect(userName,password, this.connectionId);
+        //     }
+        //     else{
+        //         String errorMsg=
+        //         "message: Password does not match UserName"+'\n'+
+        //         ""+'\n'+
+        //         "The message:"+'\n'+
+        //         "----"+'\n'+
+        //         this.ogMessage+'\n'+
+        //         "----"+'\n'+
+        //         "User "+userName+"'s password is different than what you inserted";
+        //         ;
+        //         connections.send(this.connectionId, errorMsg);
+        //     }
+        //}
     }
     
 }
