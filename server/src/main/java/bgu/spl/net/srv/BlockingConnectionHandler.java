@@ -16,6 +16,7 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
     private BufferedOutputStream out;
     private volatile boolean connected = true;
     private int connectionId;
+    private Connections<T> connections;
 
     public BlockingConnectionHandler(Socket sock, MessageEncoderDecoder<T> reader, MessagingProtocol<T> protocol) {
         this.sock = sock;
@@ -30,7 +31,7 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
 
             in = new BufferedInputStream(sock.getInputStream());
             out = new BufferedOutputStream(sock.getOutputStream());
-            protocol.start( connectionId , );
+            protocol.start(connectionId , connections );
             while (!protocol.shouldTerminate() && connected && (read = in.read()) >= 0) {
                 T nextMessage = encdec.decodeNextByte((byte) read);
                 if (nextMessage != null) {
@@ -65,5 +66,8 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
     }
     public void setConnectionId(int id){
         this.connectionId = id;
+    }
+    public void setConnections(Connections<T> connections){
+        this.connections = connections;
     }
 }

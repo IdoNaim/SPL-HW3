@@ -14,6 +14,7 @@ public class ConnectionsImpl<T> implements Connections<T> {
     private ConcurrentHashMap<String, String> userNameToPasscode; //should only add
     private ConcurrentHashMap<Integer,List<Pair<String,Integer>>> connectionIdToChannelSubscribtionId; // should add and remove from list and hashmap
     private ConcurrentHashMap<Integer, String> connectionIdToUserName; //should add and remove
+
     public ConnectionsImpl(){
         activeUsers = new ConcurrentHashMap<>();
         subscribtions = new ConcurrentHashMap<>();
