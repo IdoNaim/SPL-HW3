@@ -27,5 +27,6 @@ public interface Connections<T> {
     boolean isUserSubbed(String channel, int connectionId);
     Pair<String, Integer> getPairbyChannel(String channel, int connectionId);
     List<Integer> getSubscribers(String channel);
+    void startConnection(int connectionId, ConnectionHandler<T> ch);
 
 }

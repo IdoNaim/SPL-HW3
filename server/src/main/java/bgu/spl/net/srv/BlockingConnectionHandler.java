@@ -28,10 +28,10 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
     public void run() {
         try (Socket sock = this.sock) { //just for automatic closing
             int read;
-
             in = new BufferedInputStream(sock.getInputStream());
             out = new BufferedOutputStream(sock.getOutputStream());
-            protocol.start(connectionId , connections );
+            connections.startConnection(connectionId, this);
+            protocol.start(connectionId,connections);
             while (!protocol.shouldTerminate() && connected && (read = in.read()) >= 0) {
                 T nextMessage = encdec.decodeNextByte((byte) read);
                 if (nextMessage != null) {
