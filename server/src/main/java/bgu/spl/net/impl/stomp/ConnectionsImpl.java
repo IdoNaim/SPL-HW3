@@ -14,14 +14,12 @@ public class ConnectionsImpl<T> implements Connections<T> {
     private ConcurrentHashMap<String, String> userNameToPasscode; //should only add
     private ConcurrentHashMap<Integer,List<Pair<String,Integer>>> connectionIdToChannelSubscribtionId; // should add and remove from list and hashmap
     private ConcurrentHashMap<Integer, String> connectionIdToUserName; //should add and remove
-    private int index;
     public ConnectionsImpl(){
         activeUsers = new ConcurrentHashMap<>();
         subscribtions = new ConcurrentHashMap<>();
         userNameToPasscode = new ConcurrentHashMap<>();
         connectionIdToUserName = new ConcurrentHashMap<>();
         connectionIdToChannelSubscribtionId = new ConcurrentHashMap<>();
-        index = 0; 
     }
     public void startConnection(int connectionId, ConnectionHandler<T> ch){
         activeUsers.putIfAbsent(connectionId, ch);
@@ -37,7 +35,6 @@ public class ConnectionsImpl<T> implements Connections<T> {
     
 
     public boolean send(int connectionId, T msg){
-        //TODO: implement
         try{
         ConnectionHandler<T> ch = activeUsers.get(connectionId);
         ch.send(msg);
