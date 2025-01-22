@@ -1,5 +1,7 @@
 package bgu.spl.net.impl.stomp;
 
+import java.util.List;
+
 import bgu.spl.net.srv.Connections;
 
 public class SendFrame extends Frame {
@@ -11,13 +13,55 @@ public class SendFrame extends Frame {
     public void process(Connections<String> connections) {
         // TODO Auto-generated method stub
         String destination = headers.get("destination");
-        //assuming destination is like /topic/police:
-        String[] destArray = destination.split("/"); //should hold [,topic , police]
-        /**
-         need to change here because destination is actualy like /police
-        
-        */
-        connections.send(destArray[2], body);
+
+        String[] destArray = destination.split("/"); //should hold [,police]
+        String channel = destArray[1];
+
+        if(connections.isUserOnline(connectionId)){
+            if(connections.isUserSubbed(channel,connectionId)){
+                List<Integer> subscribers = connections.getSubscribers(channel);
+                for (int subscriber : subscribers) {
+                    Pair<String,Integer> pair = connections.getPairbyChannel(channel,connectionId);
+                    int subscriberSubId = pair.getSecond();
+                    String Message = 
+                    "MESSAGE"+'\n'+
+                    "subscription:"+subscriberSubId+'\n'+
+                    "message-id:"++'\n'+ //need to figure out how to give a special index for each message
+                    "destination:"+destination+'\n'+
+                    ""+'\n'+
+                    body+'\n'+
+                    '\u0000';
+                    connections.send(connectionId, Message);
+                }
+            }
+            else{
+                String errorMsg=
+                "ERROR"+ '\n'+
+                "message:You are not subscribed to this channel"+'\n'+
+                ""+'\n'+
+                 "The message:"+'\n'+
+                 "----"+'\n'+
+                 this.ogMessage+'\n'+
+                "----"+'\n'+
+                "you tried sending a message to channel "+channel+" but you are not subscribed to it"+'\n'+
+                '\u0000';
+                connections.send(connectionId, errorMsg);
+            }
+
+        }
+        else{
+            String errorMsg =
+            "ERROR"+ '\n'+
+                "message:User tried reporting without logging in"+'\n'+
+                ""+'\n'+
+                 "The message:"+'\n'+
+                 "----"+'\n'+
+                 this.ogMessage+'\n'+
+                "----"+'\n'+
+                "client with connection ID "+connectionId+" tried reporting but wasnt logged in"+'\n'+
+                '\u0000';
+                connections.send(connectionId, errorMsg);
+        }
     }
     
 }

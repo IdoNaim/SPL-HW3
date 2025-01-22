@@ -12,7 +12,7 @@ public class UnsubscribeFrame extends Frame {
         // TODO Auto-generated method stub
         //throw new UnsupportedOperationException("Unimplemented method 'process'");
         if(connections.isUserOnline(connectionId)){
-            if(connections.isUserSubbed(headers.get("id"), this.connectionId)){
+            if(connections.isUserSubbed(Integer.parseInt(headers.get("id")), this.connectionId)){
                 connections.unsubscribe(headers.get("id"), this.connectionId);
             }
             else{

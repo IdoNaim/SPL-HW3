@@ -2,6 +2,8 @@ package bgu.spl.net.srv;
 
 import java.io.IOException;
 
+import bgu.spl.net.impl.stomp.Pair;
+
 public interface Connections<T> {
 
     boolean send(int connectionId, T msg);
@@ -20,5 +22,8 @@ public interface Connections<T> {
     boolean userPassword(String userName, String password);
     boolean isUserOnline(String userName);
     boolean isUserOnline(int connectionId);
-    boolean isUserSubbed(String subId, int connectionId);
+    boolean isUserSubbed(int intSubId, int connectionId);
+    boolean isUserSubbed(String channel, int connectionId);
+    Pair<String, Integer> getPairbyChannel(String channel, int connectionId);
+
 }

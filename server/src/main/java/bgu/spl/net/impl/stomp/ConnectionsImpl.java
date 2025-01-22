@@ -129,11 +129,24 @@ public class ConnectionsImpl<T> implements Connections<T> {
     public boolean isUserOnline(int connectionId){
         return connectionIdToUserName.containsKey(connectionId);
     }
-    public boolean isUserSubbed(String subId, int connectionId){
-        int intSubId = Integer.parseInt(subId);
+    public boolean isUserSubbed(int intSubId, int connectionId){
         Pair<String, Integer> result = getPairbySubId(intSubId, connectionId);
         return !(result == null);
-
     }
-
+    public boolean isUserSubbed(String channel, int connectionId){
+        Pair<String, Integer> result = getPairbyChannel(channel, connectionId);
+        return !(result==null);
+    }
+    public Pair<String, Integer> getPairbyChannel(String channel, int connectionId){
+        List<Pair<String,Integer>> list = connectionIdToChannelSubscribtionId.get(connectionId);
+        for(Pair<String,Integer> pair:list){
+            if(pair.getFirst().equals(channel)){
+                return pair;
+            }
+        }
+        return null;
+    }
+    public List<Integer> getSubscribers(String channel){
+        return subscribtions.get(channel);
+    }
 }
