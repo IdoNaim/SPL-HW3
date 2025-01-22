@@ -8,18 +8,24 @@ public class StompServer {
 
     public static void main(String[] args) {
         //TODO: implement
-        if (args[1].equals("tpc")){
-            Server.threadPerClient(
-                7777, //port
-                () -> new StompMessagingProtocolImpl(), //protocol factory
-                LineMessageEncoderDecoder::new //message encoder decoder factory
-        ).serve();
-        }
-        else if(args[1].equals("reactor")){
-        
-        }
-        else{
-            System.out.println("reactor or tpc");
+        int port;
+        try{
+            port = Integer.parseInt(args[0]);
+            if (args[1].equals("tpc")){
+                Server.threadPerClient(
+                    port, //port
+                    () -> new StompMessagingProtocolImpl(), //protocol factory
+                    LineMessageEncoderDecoder::new //message encoder decoder factory
+            ).serve();
+            }
+            else if(args[1].equals("reactor")){
+            
+            }
+            else{
+                System.out.println("you must supply on the second argument: <type_of_server> - tpc / reactor");
+            }
+        }catch(Exception e){
+            System.out.println("you must supply two arguments: <port>, <type_of_server> - tpc / reactor");
         }
     }
 }
