@@ -63,9 +63,6 @@ public class ConnectionsImpl<T> implements Connections<T> {
         ConnectionHandler<T> ch = activeUsers.get(connectionId);
         disconnect(connectionId);
         ch.send(msgWithReceipt);
-
-        //send message back with receipt
-
     }
     public void disconnect(int connectionId){
         if(activeUsers.containsKey(connectionId)){

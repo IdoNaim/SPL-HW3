@@ -6,7 +6,12 @@ public class DisconnectFrame extends Frame{
         super(connectionId);
     }
     public void process(Connections<String> connections){
-        String reciept = headers.get("receipt");
-        connections.disconnect(this.connectionId, reciept);
+        String recieptId = headers.get("receipt");
+        String recieptMsg =
+        "RECEIPT"+'\n'+
+        "receipt-id:"+recieptId+'\n'+
+        ""+'\n'+
+        '\u0000';
+        connections.disconnect(this.connectionId, recieptMsg);
     }
 }
