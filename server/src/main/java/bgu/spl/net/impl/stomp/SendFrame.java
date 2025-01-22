@@ -21,7 +21,7 @@ public class SendFrame extends Frame {
             if(connections.isUserSubbed(channel,connectionId)){
                 List<Integer> subscribers = connections.getSubscribers(channel);
                 for (int subscriber : subscribers) {
-                    Pair<String,Integer> pair = connections.getPairbyChannel(channel,connectionId);
+                    Pair<String,Integer> pair = connections.getPairbyChannel(channel,subscriber);
                     int subscriberSubId = pair.getSecond();
                     String Message = 
                     "MESSAGE"+'\n'+

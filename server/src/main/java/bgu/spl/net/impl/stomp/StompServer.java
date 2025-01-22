@@ -1,6 +1,5 @@
 package bgu.spl.net.impl.stomp;
 
-import bgu.spl.net.impl.echo.EchoProtocol;
 import bgu.spl.net.impl.echo.LineMessageEncoderDecoder;
 import bgu.spl.net.srv.Server;
 
@@ -8,6 +7,7 @@ public class StompServer {
 
     public static void main(String[] args) {
         //TODO: implement
+        args = new String[]{"7777","tpc"};
         int port;
         try{
             port = Integer.parseInt(args[0]);
