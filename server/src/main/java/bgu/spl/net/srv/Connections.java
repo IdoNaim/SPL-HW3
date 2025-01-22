@@ -11,6 +11,6 @@ public interface Connections<T> {
     void disconnect(int connectionId);
     void subscribe(String channel, String subscribtionId, int connectionId);
     void unsubscribe(String subId, int connectionId);
-    void connect(String userName, String password, int connectionId);
-    void disconnect(int connectionId, String receipt);
+    void connect(String userName, int connectionId);
+    void disconnect(int connectionId, T msgWithReceipt);
 }
