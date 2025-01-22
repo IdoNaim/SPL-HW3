@@ -8,8 +8,6 @@ public class ConnectFrame extends Frame {
     }
     @Override
     public void process(Connections<String> connections) {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'process'");
         String userName = headers.get("login");
         String password = headers.get("passcode");
         
@@ -18,7 +16,22 @@ public class ConnectFrame extends Frame {
             connections.connect(userName, connectionId);
         }else{
             if(connections.userPassword(userName,password)){
-                connections.connect(userName, connectionId);
+                if(!connections.isUserOnline(userName)){
+                    connections.connect(userName, connectionId);
+                }
+                else{
+                    String errorMsg=
+                    "ERROR"+ '\n'+
+                "message:User already logged in"+'\n'+
+                ""+'\n'+
+                 "The message:"+'\n'+
+                 "----"+'\n'+
+                 this.ogMessage+'\n'+
+                "----"+'\n'+
+                "User "+userName+"' is logged in somewhere else"+'\n'+
+                '\u0000';
+                connections.send(connectionId,errorMsg);
+                }
             }
             else{
                 String errorMsg=
@@ -29,7 +42,8 @@ public class ConnectFrame extends Frame {
                  "----"+'\n'+
                  this.ogMessage+'\n'+
                 "----"+'\n'+
-                "User "+userName+"'s password is different than what you inserted";
+                "User "+userName+"'s password is different than what you inserted"+'\n'+
+                '\u0000';
                 connections.send(connectionId, errorMsg);
             }
         }

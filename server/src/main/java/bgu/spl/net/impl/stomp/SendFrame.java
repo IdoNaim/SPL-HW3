@@ -10,10 +10,13 @@ public class SendFrame extends Frame {
     @Override
     public void process(Connections<String> connections) {
         // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'process'");
         String destination = headers.get("destination");
         //assuming destination is like /topic/police:
         String[] destArray = destination.split("/"); //should hold [,topic , police]
+        /**
+         need to change here because destination is actualy like /police
+        
+        */
         connections.send(destArray[2], body);
     }
     

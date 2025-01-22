@@ -13,7 +13,6 @@ public class ConnectionsImpl<T> implements Connections<T> {
     private ConcurrentHashMap<String, List<Integer>> subscribtions; // should add and remove from *list*
     private ConcurrentHashMap<String, String> userNameToPasscode; //should only add
     private ConcurrentHashMap<Integer,List<Pair<String,Integer>>> connectionIdToChannelSubscribtionId; // should add and remove from list and hashmap
-
     private ConcurrentHashMap<Integer, String> connectionIdToUserName; //should add and remove
     private int index;
     public ConnectionsImpl(){
@@ -73,7 +72,7 @@ public class ConnectionsImpl<T> implements Connections<T> {
             activeUsers.remove(connectionId);
         }
         if(connectionIdToUserName.containsKey(connectionId)){
-            connectionIdToUserName.remove(connectionId);
+             connectionIdToUserName.remove(connectionId);
         }
     }
     public void subscribe(String channel, String subscribtionId, int connectionId){
@@ -118,6 +117,17 @@ public class ConnectionsImpl<T> implements Connections<T> {
     }
     public boolean userPassword(String userName, String password){
         return userNameToPasscode.get(userName).equals(password);
+    }
+    public boolean isUserOnline(String userName){
+        for (String name : connectionIdToUserName.values()) {
+            if (name.equals(userName)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean isUserOnline(int connectionId){
+        return connectionIdToUserName.containsKey(connectionId);
     }
 
 }

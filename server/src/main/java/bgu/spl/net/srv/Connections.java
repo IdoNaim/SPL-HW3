@@ -16,4 +16,6 @@ public interface Connections<T> {
     boolean userExists(String userName);
     void registerUser(String userName, String password);
     boolean userPassword(String userName, String password);
+    boolean isUserOnline(String userName);
+    boolean isUserOnline(int connectionId);
 }
