@@ -26,7 +26,7 @@ public class SendFrame extends Frame {
                     String Message = 
                     "MESSAGE"+'\n'+
                     "subscription:"+subscriberSubId+'\n'+
-                    "message-id:"++'\n'+ //need to figure out how to give a special index for each message
+                    "message-id:"+IdGenerator.getInstance().getId()+'\n'+
                     "destination:"+destination+'\n'+
                     ""+'\n'+
                     body+'\n'+
