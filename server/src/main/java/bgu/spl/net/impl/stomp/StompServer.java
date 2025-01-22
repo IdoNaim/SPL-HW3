@@ -19,7 +19,12 @@ public class StompServer {
             ).serve();
             }
             else if(args[1].equals("reactor")){
-            
+                Server.reactor(
+                 Runtime.getRuntime().availableProcessors(),
+                 port, //port
+                 () -> new StompMessagingProtocolImpl(), //protocol factory
+                 LineMessageEncoderDecoder::new //message encoder decoder factory
+         ).serve();
             }
             else{
                 System.out.println("you must supply on the second argument: <type_of_server> - tpc / reactor");
