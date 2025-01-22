@@ -108,5 +108,16 @@ public class ConnectionsImpl<T> implements Connections<T> {
         }
         return null;
     }
+    public boolean userExists(String userName){
+        for (String name : userNameToPasscode.keySet()) {
+            if (name.equals(userName)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean userPassword(String userName, String password){
+        return userNameToPasscode.get(userName).equals(password);
+    }
 
 }

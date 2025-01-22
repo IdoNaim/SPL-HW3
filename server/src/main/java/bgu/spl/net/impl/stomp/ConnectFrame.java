@@ -12,30 +12,26 @@ public class ConnectFrame extends Frame {
         //throw new UnsupportedOperationException("Unimplemented method 'process'");
         String userName = headers.get("login");
         String password = headers.get("passcode");
-        connections.connect(userName,password, this.connectionId);
-
         
-        // if(!connections.userExists(userName)){
-        //     connections.connect(userName,password);
-
-        // }
-        // else{
-        //     if(connections.getPassword(userName).equals(password)){
-        //         connections.connect(userName,password, this.connectionId);
-        //     }
-        //     else{
-        //         String errorMsg=
-        //         "message: Password does not match UserName"+'\n'+
-        //         ""+'\n'+
-        //         "The message:"+'\n'+
-        //         "----"+'\n'+
-        //         this.ogMessage+'\n'+
-        //         "----"+'\n'+
-        //         "User "+userName+"'s password is different than what you inserted";
-        //         ;
-        //         connections.send(this.connectionId, errorMsg);
-        //     }
-        //}
-    }
-    
+        if(!connections.userExists(userName)){
+            connections.registerUser(userName,password);
+            connections.connect(userName, connectionId);
+        }else{
+            if(connections.userPassword(userName,password)){
+                connections.connect(userName, connectionId);
+            }
+            else{
+                String errorMsg=
+                "ERROR"+ '\n'+
+                "message: Password does not match UserName"+'\n'+
+                ""+'\n'+
+                 "The message:"+'\n'+
+                 "----"+'\n'+
+                 this.ogMessage+'\n'+
+                "----"+'\n'+
+                "User "+userName+"'s password is different than what you inserted";
+                connections.send(connectionId, errorMsg);
+            }
+        }
+    }   
 }

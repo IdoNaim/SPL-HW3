@@ -13,4 +13,7 @@ public interface Connections<T> {
     void unsubscribe(String subId, int connectionId);
     void connect(String userName, int connectionId);
     void disconnect(int connectionId, T msgWithReceipt);
+    boolean userExists(String userName);
+    void registerUser(String userName, String password);
+    boolean userPassword(String userName, String password);
 }
