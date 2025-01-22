@@ -129,5 +129,11 @@ public class ConnectionsImpl<T> implements Connections<T> {
     public boolean isUserOnline(int connectionId){
         return connectionIdToUserName.containsKey(connectionId);
     }
+    public boolean isUserSubbed(String subId, int connectionId){
+        int intSubId = Integer.parseInt(subId);
+        Pair<String, Integer> result = getPairbySubId(intSubId, connectionId);
+        return !(result == null);
+
+    }
 
 }

@@ -9,6 +9,8 @@ public interface Connections<T> {
     void send(String channel, T msg);
 
     void disconnect(int connectionId);
+
+
     void subscribe(String channel, String subscribtionId, int connectionId);
     void unsubscribe(String subId, int connectionId);
     void connect(String userName, int connectionId);
@@ -18,4 +20,5 @@ public interface Connections<T> {
     boolean userPassword(String userName, String password);
     boolean isUserOnline(String userName);
     boolean isUserOnline(int connectionId);
+    boolean isUserSubbed(String subId, int connectionId);
 }
