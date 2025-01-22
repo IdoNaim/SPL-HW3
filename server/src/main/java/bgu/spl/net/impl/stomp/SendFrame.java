@@ -47,7 +47,6 @@ public class SendFrame extends Frame {
                 '\u0000';
                 connections.send(connectionId, errorMsg);
             }
-
         }
         else{
             String errorMsg =

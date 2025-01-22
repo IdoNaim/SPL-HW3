@@ -1,6 +1,7 @@
 package bgu.spl.net.srv;
 
 import java.io.IOException;
+import java.util.List;
 
 import bgu.spl.net.impl.stomp.Pair;
 
@@ -25,5 +26,6 @@ public interface Connections<T> {
     boolean isUserSubbed(int intSubId, int connectionId);
     boolean isUserSubbed(String channel, int connectionId);
     Pair<String, Integer> getPairbyChannel(String channel, int connectionId);
+    List<Integer> getSubscribers(String channel);
 
 }
