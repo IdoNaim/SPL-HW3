@@ -26,18 +26,14 @@ public abstract class Frame{
             }
             i++;
         }
-        body = message[i+1];
+        //i here is "" so we need to add 1 to it
+        i++;
+        body = "";
+        while(!message[i].equals("\u0000")){
+            body = body + message[i];
+            i++;
+        }
 
      }
-    // public static Frame createFrame(String message){
-    //     Frame result = new Frame();
-    //     try{
-    //     result.editFrame(message);
-    //     return result;
-
-    //     }catch(Exception e){
-    //         return null;
-    //     }
-    // }
     public abstract void process(Connections<String> connections);
 }
