@@ -20,6 +20,8 @@ public class NonBlockingConnectionHandler<T> implements ConnectionHandler<T> {
     private final Queue<ByteBuffer> writeQueue = new ConcurrentLinkedQueue<>();
     private final SocketChannel chan;
     private final Reactor reactor;
+    private int connectionId;
+    private Connections<T> connections;
 
     public NonBlockingConnectionHandler(
             MessageEncoderDecoder<T> reader,
@@ -46,14 +48,12 @@ public class NonBlockingConnectionHandler<T> implements ConnectionHandler<T> {
             buf.flip();
             return () -> {
                 try {
+                    connections.startConnection(connectionId, this);
+                    protocol.start(connectionId,connections);
                     while (buf.hasRemaining()) {
                         T nextMessage = encdec.decodeNextByte(buf.get());
                         if (nextMessage != null) {
-                    //        T response = protocol.process(nextMessage);
-                     //       if (response != null) {
-                     //           writeQueue.add(ByteBuffer.wrap(encdec.encode(response)));
-                     //           reactor.updateInterestedOps(chan, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
-                       //     }
+                            protocol.process(nextMessage);
                         }
                     }
                 } finally {
@@ -119,5 +119,15 @@ public class NonBlockingConnectionHandler<T> implements ConnectionHandler<T> {
     @Override
     public void send(T msg) {
         //TODO: IMPLEMENT IF NEEDED
+        if (msg != null) {
+            writeQueue.add(ByteBuffer.wrap(encdec.encode(msg)));
+            reactor.updateInterestedOps(chan, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+        }
+    }
+    public void setConnectionId(int id){
+        this.connectionId = id;
+    }
+    public void setConnections(Connections<T> connections){
+        this.connections = connections;
     }
 }

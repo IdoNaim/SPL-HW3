@@ -10,7 +10,7 @@ public class SendFrame extends Frame {
     }
 
     @Override
-    public void process(Connections<String> connections) {
+    public boolean process(Connections<String> connections) {
         // TODO Auto-generated method stub
         String destination = headers.get("destination");
 
@@ -33,6 +33,7 @@ public class SendFrame extends Frame {
                     '\u0000';
                     connections.send(subscriber, Message);
                 }
+                return false;
             }
             else{
                 String errorMsg=
@@ -46,6 +47,7 @@ public class SendFrame extends Frame {
                 "you tried sending a message to channel "+channel+" but you are not subscribed to it"+'\n'+
                 '\u0000';
                 connections.send(connectionId, errorMsg);
+                return true;
             }
         }
         else{
@@ -60,6 +62,7 @@ public class SendFrame extends Frame {
                 "client with connection ID "+connectionId+" tried reporting but wasnt logged in"+'\n'+
                 '\u0000';
                 connections.send(connectionId, errorMsg);
+                return true;
         }
     }
     

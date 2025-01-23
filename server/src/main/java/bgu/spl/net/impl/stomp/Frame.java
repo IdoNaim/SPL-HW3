@@ -20,7 +20,7 @@ public abstract class Frame{
         command = message[0];
         int i = 1;
         // while(!message[i].equals("")){
-        while(message[i].contains(":")){
+        while(i < message.length && message[i].contains(":")){
             if(!message[i].equals(":")){
                 String[] header = message[i].split(":");
                 headers.putIfAbsent(header[0], header[1]);
@@ -29,11 +29,12 @@ public abstract class Frame{
         }
         //i here is "" so we need to add 1 to it
         body = "";
-        while(!message[i].equals("\u0000")){
-            body = body + message[i];
+        while(i< message.length && !message[i].equals("\u0000")){
+            body = body + message[i]+'\n';
             i++;
         }
 
      }
-    public abstract void process(Connections<String> connections);
+     //the method return whether or not to terminate connection;
+    public abstract boolean process(Connections<String> connections);
 }

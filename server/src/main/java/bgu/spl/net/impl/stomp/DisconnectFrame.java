@@ -5,7 +5,7 @@ public class DisconnectFrame extends Frame{
     public DisconnectFrame(int connectionId){
         super(connectionId);
     }
-    public void process(Connections<String> connections){
+    public boolean process(Connections<String> connections){
         //check if user is not connected
         String recieptId = headers.get("receipt");
         String recieptMsg =
@@ -14,5 +14,6 @@ public class DisconnectFrame extends Frame{
         ""+'\n'+
         '\u0000';
         connections.disconnect(this.connectionId, recieptMsg);
+        return true;
     }
 }

@@ -7,7 +7,7 @@ public class ConnectFrame extends Frame {
         super(connectionId);
     }
     @Override
-    public void process(Connections<String> connections) {
+    public boolean process(Connections<String> connections) {
         String userName = headers.get("login");
         String password = headers.get("passcode");
         String connectedMsg = 
@@ -19,12 +19,13 @@ public class ConnectFrame extends Frame {
             connections.registerUser(userName,password);
             connections.connect(userName, connectionId);
             connections.send(connectionId, connectedMsg);
+            return false;
         }else{
             if(connections.userPassword(userName,password)){
                 if(!connections.isUserOnline(userName)){
                     connections.connect(userName, connectionId);
                     connections.send(connectionId, connectedMsg);
-
+                    return false;
                 }
                 else{
                     String errorMsg=
@@ -38,6 +39,7 @@ public class ConnectFrame extends Frame {
                 "User "+userName+"' is logged in somewhere else"+'\n'+
                 '\u0000';
                 connections.send(connectionId,errorMsg);
+                return true;
                 }
             }
             else{
@@ -52,6 +54,7 @@ public class ConnectFrame extends Frame {
                 "User "+userName+"'s password is different than what you inserted"+'\n'+
                 '\u0000';
                 connections.send(connectionId, errorMsg);
+                return true;
             }
         }
     }   

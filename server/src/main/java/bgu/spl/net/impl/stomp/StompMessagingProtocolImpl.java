@@ -25,28 +25,40 @@ public class StompMessagingProtocolImpl implements StompMessagingProtocol<String
         if(command.equals("CONNECT")){
             ConnectFrame frame = new ConnectFrame(this.connectionId);
             frame.initFrame(message);
-            frame.process(connections);
+            boolean result = frame.process(connections);
+            // if(result){
+            //     shouldTerminate = true;
+            // }
 
         }else if(command.equals("DISCONNECT")){
             DisconnectFrame frame = new DisconnectFrame(this.connectionId);
             frame.initFrame(message);
-            frame.process(connections);
-            shouldTerminate = true;
+            boolean result = frame.process(connections);
+            //shouldTerminate = true;
 
         }else if(command.equals("SUBSCRIBE")){
             SubscribeFrame frame = new SubscribeFrame(this.connectionId);
             frame.initFrame(message);
-            frame.process(connections);
+            boolean result =  frame.process(connections);
+            // if(result){
+            //     shouldTerminate = true;
+            // }
 
         }else if(command.equals("UNSUBSCRIBE")){
             UnsubscribeFrame frame = new UnsubscribeFrame(this.connectionId);
             frame.initFrame(message);
-            frame.process(connections);
+            boolean result = frame.process(connections);
+            // if(result){
+            //     shouldTerminate = true;
+            // }
 
         }else if(command.equals("SEND")){
             SendFrame frame = new SendFrame(this.connectionId);
             frame.initFrame(message);
-            frame.process(connections);
+            boolean result = frame.process(connections);
+            // if(result){
+            //     shouldTerminate = true;
+            // }
         }
         else{
            //figure out what to do in error

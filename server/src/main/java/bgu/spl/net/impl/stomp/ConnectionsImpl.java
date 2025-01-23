@@ -90,9 +90,9 @@ public class ConnectionsImpl<T> implements Connections<T> {
         String channel = pair.getFirst();
         subscribtions.get(channel).remove(connectionId);
         connectionIdToChannelSubscribtionId.get(connectionId).remove(pair);
-        if(connectionIdToChannelSubscribtionId.get(connectionId).isEmpty()){
-            connectionIdToChannelSubscribtionId.remove(connectionId);
-        }
+        // if(connectionIdToChannelSubscribtionId.get(connectionId).isEmpty()){
+        //     connectionIdToChannelSubscribtionId.remove(connectionId);
+        // }
     }
     public Pair<String,Integer> getPairbySubId(int subId, int connectionId){
         List<Pair<String,Integer>> list = connectionIdToChannelSubscribtionId.get(connectionId);

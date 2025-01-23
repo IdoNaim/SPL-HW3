@@ -8,13 +8,14 @@ public class SubscribeFrame extends Frame {
     }
 
     @Override
-    public void process(Connections<String> connections) {
+    public boolean process(Connections<String> connections) {
         String destination = headers.get("destination");
         // destination is like /police:
         String[] destArray = destination.split("/"); //should hold [, police]
         String subscriptionId = headers.get("id");
         if(connections.isUserOnline(connectionId)){
             connections.subscribe(destArray[destArray.length-1], subscriptionId, this.connectionId);
+            return false;
         }
         else{
             String errorMsg =
@@ -28,6 +29,7 @@ public class SubscribeFrame extends Frame {
                 "client with connection ID "+connectionId+" tried subscribing but wasnt logged in"+'\n'+
                 '\u0000';
                 connections.send(connectionId, errorMsg);
+                return true;
         }
 
     }
