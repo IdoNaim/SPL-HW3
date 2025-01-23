@@ -71,6 +71,7 @@ public class ConnectionsImpl<T> implements Connections<T> {
         }
     }
     public void subscribe(String channel, String subscribtionId, int connectionId){
+        // change that if already subscribed dont add to list;
         int intSubId = Integer.parseInt(subscribtionId);
         if(!subscribtions.containsKey(channel)){
             subscribtions.putIfAbsent(channel, new ArrayList<Integer>());

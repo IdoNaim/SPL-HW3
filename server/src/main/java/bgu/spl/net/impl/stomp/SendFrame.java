@@ -31,7 +31,7 @@ public class SendFrame extends Frame {
                     ""+'\n'+
                     body+'\n'+
                     '\u0000';
-                    connections.send(connectionId, Message);
+                    connections.send(subscriber, Message);
                 }
             }
             else{

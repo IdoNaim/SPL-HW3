@@ -6,6 +6,7 @@ public class DisconnectFrame extends Frame{
         super(connectionId);
     }
     public void process(Connections<String> connections){
+        //check if user is not connected
         String recieptId = headers.get("receipt");
         String recieptMsg =
         "RECEIPT"+'\n'+

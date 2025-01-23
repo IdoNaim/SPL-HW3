@@ -51,6 +51,7 @@ public class StompMessagingProtocolImpl implements StompMessagingProtocol<String
         else{
            //figure out what to do in error
            String errorMsg=
+           "ERROR"+'\n'+
            "message:malformed frame recieved"+'\n'+
            ""+'\n'+
            "The message: "+'\n'+
