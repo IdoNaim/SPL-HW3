@@ -32,7 +32,8 @@ public class test {
         "receipt:77"+'\n'+
         ""+'\n'+
         '\u0000';
-
+        String check = "police";
+        String checking[] = check.split("/");
         ConnectFrame connectFrame = new ConnectFrame(0);
         SendFrame sendFrame = new SendFrame(0);
         SubscribeFrame subscribeFrame = new SubscribeFrame(0);

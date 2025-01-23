@@ -9,14 +9,12 @@ public class SubscribeFrame extends Frame {
 
     @Override
     public void process(Connections<String> connections) {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'process'");
         String destination = headers.get("destination");
-        //assuming destination is like /topic/police:
-        String[] destArray = destination.split("/"); //should hold [,topic , police]
+        // destination is like /police:
+        String[] destArray = destination.split("/"); //should hold [, police]
         String subscriptionId = headers.get("id");
         if(connections.isUserOnline(connectionId)){
-            connections.subscribe(destArray[2], subscriptionId, this.connectionId);
+            connections.subscribe(destArray[destArray.length-1], subscriptionId, this.connectionId);
         }
         else{
             String errorMsg =

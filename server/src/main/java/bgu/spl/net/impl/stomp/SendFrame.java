@@ -15,7 +15,7 @@ public class SendFrame extends Frame {
         String destination = headers.get("destination");
 
         String[] destArray = destination.split("/"); //should hold [,police]
-        String channel = destArray[1];
+        String channel = destArray[destArray.length-1];
 
         if(connections.isUserOnline(connectionId)){
             if(connections.isUserSubbed(channel,connectionId)){
