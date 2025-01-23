@@ -21,7 +21,7 @@ public abstract class Frame{
         int i = 1;
         // while(!message[i].equals("")){
         while(message[i].contains(":")){
-            if(message[i]!=":"){
+            if(!message[i].equals(":")){
                 String[] header = message[i].split(":");
                 headers.putIfAbsent(header[0], header[1]);
             }
