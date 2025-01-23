@@ -8,7 +8,7 @@ public class test {
         "host:stomp.cs.bgu.ac.il" +'\n'+
         "login:meni" +'\n'+
         "passcode:films"+'\n'+
-        ""+'\n'+
+        '\n'+
         '\u0000';
         String send = 
         "SEND"+'\n'+
@@ -32,6 +32,11 @@ public class test {
         "receipt:77"+'\n'+
         ""+'\n'+
         '\u0000';
+        String[] commandArr = connect.split("\n");
+        String command = commandArr[0];
+        if(command.equals("CONNECT")){
+
+        }
         String check = "police";
         String checking[] = check.split("/");
         ConnectFrame connectFrame = new ConnectFrame(0);

@@ -14,7 +14,7 @@ public class LineMessageEncoderDecoder implements MessageEncoderDecoder<String> 
         //notice that the top 128 ascii characters have the same representation as their utf-8 counterparts
         //this allow us to do the following comparison
         if (nextByte == '\u0000') {
-            return popString();
+            return popString()+'\u0000';
         }
 
         pushByte(nextByte);

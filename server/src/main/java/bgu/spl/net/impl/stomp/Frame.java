@@ -19,7 +19,8 @@ public abstract class Frame{
         String[] message = msg.split("\n");
         command = message[0];
         int i = 1;
-        while(!message[i].equals("")){
+        // while(!message[i].equals("")){
+        while(message[i].contains(":")){
             if(message[i]!=":"){
                 String[] header = message[i].split(":");
                 headers.putIfAbsent(header[0], header[1]);
@@ -27,7 +28,6 @@ public abstract class Frame{
             i++;
         }
         //i here is "" so we need to add 1 to it
-        i++;
         body = "";
         while(!message[i].equals("\u0000")){
             body = body + message[i];
