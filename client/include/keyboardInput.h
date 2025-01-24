@@ -13,15 +13,15 @@ class keyboardInput
 private:
     atomic<bool> running;
     mutex& queueMutex;
-    queue<Frame> frameQueue;
-    istringstream inputLine;
+    queue<string>& frameQueue;
+    istringstream iss;
     string command;
     thread keyboardThread;
 
     void readFromKeyboard();
 
 public:
-    keyboardInput(mutex& queueMutex, queue<Frame> frameQueue);
+    keyboardInput(mutex& queueMutex, queue<string>& frameQueue);
     void start();
     void stop();
 };

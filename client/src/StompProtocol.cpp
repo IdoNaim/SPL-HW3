@@ -1,49 +1,77 @@
 #include "../include/StompProtocol.h"
 #include <sstream>
 
-StompProtocol::StompProtocol() : clientID("") {}
+class StompProtocol {
 
-string StompProtocol::createFrame(const string& command, const map<string, string>& headers, const string& body) {
-    ostringstream frame;
-    frame << command << "\n";
+    static int idGenerator() {
+        static int id = 1;  // This is initialized only once
+        return id++;
+    }
+    static int receiptIdGenerator(){
+        static int receiptId = 1;  // This is initialized only once
+        return receiptId++;
+    }
+    static map<string, int> subscriptions;
 
-    for (const auto& [key, value] : headers) {
-        frame << key << ":" << value << "\n";
+    static string createSendFrame(string destination, string message) {
+
     }
 
-    frame << "\n" << body << "\0";
-    return frame.str();
-}
+    static string createConnectFrame(string line) {
+        istringstream iss(line);
+        string command, hostWithPort, username, password, host, portString;
+        iss >> command >> hostWithPort >> username >> password;
+        int colonPosition = hostWithPort.find(':');
+        host = hostWithPort.substr(0, colonPosition);
+        portString = hostWithPort.substr(colonPosition+1);
+        short port = static_cast<short>(stoi(portString));
+        return string("CONNECT\n") +
+               "accept-version:1.2\n" +
+               "host:" + host + "\n" +
+               "login:" + username + "\n" +
+               "passcode:" + password + "\n\n" +
+               string(1,'\0');
+    }
 
-string StompProtocol::connectFrame() {
-    map<string, string> headers = {
-        {"accept-version", "1.2"}
-    };
-    return createFrame("CONNECT", headers, "");
-}
+    static string createSubscribeFrame(string line){
+        istringstream iss(line);
+        string command, destination;
+        iss >> command >> destination;
+        int id = idGenerator();
+        subscriptions[destination] = id;
+        int receiptId = receiptIdGenerator();
+        return string("SUBSCRIBE\n") +
+                "destination:/" + destination + "\n" +
+                "id:" + to_string(id) + "\n" +
+                "receipt:" + to_string(receiptId) + "\n\n" +
+                string(1,'\0');
+    }
 
-string StompProtocol::subscribeFrame(const string& topic) {
-    map<string, string> headers = {
-        {"destination", topic},
-        {"id", topic}
-    };
-    return createFrame("SUBSCRIBE", headers, "");
-}
+    static string createUnsubscribeFrame(string line){
+        istringstream iss(line);
+        string command, channelName;
+        iss >> command >> channelName;
+        int idToDelete;
+        for (auto it = subscriptions.begin(); it != subscriptions.end(); it++) {
+            if (it->first == channelName) {
+                idToDelete = it->second;
+                subscriptions.erase(it);
+                break;
+            }
+        }
+        return string("UNSUBSCRIBE\n") +
+                "id:" + to_string(idToDelete) + "\n" +
+                "receipt:" + to_string(receiptIdGenerator()) + "\n\n" +
+                string(1,'\0');
+    }
 
-string StompProtocol::unsubscribeFrame(const string& topic) {
-    map<string, string> headers = {
-        {"id", topic}
-    };
-    return createFrame("UNSUBSCRIBE", headers, "");
-}
+    /////// TODO: REPORT FRAME, SUMMARY FRAME ///////
 
-string StompProtocol::sendFrame(const string& topic, const string& message) {
-    map<string, string> headers = {
-        {"destination", topic}
-    };
-    return createFrame("SEND", headers, message);
-}
+    static string createLogoutFrame(){
+            return string("DISCONNECT\n") +
+            "receipt:" + to_string(receiptIdGenerator()) + "\n\n" +
+            string(1,'\0'); 
+    }
 
-string StompProtocol::disconnectFrame() {
-    return createFrame("DISCONNECT", {}, "");
+    // Other frame creation methods (e.g., SUBSCRIBE, UNSUBSCRIBE, etc.) can be added here
 }

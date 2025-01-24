@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-keyboardInput::keyboardInput(mutex& queueMutex, queue<Frame> frameQueue)
+keyboardInput::keyboardInput(mutex& queueMutex, queue<string>& frameQueue)
     : queueMutex(queueMutex), frameQueue(frameQueue), running(false) {}
 
 void keyboardInput::start() {
@@ -22,41 +22,20 @@ void keyboardInput::stop() {
 
 void keyboardInput::readFromKeyboard() {
     while (running) {
-        string input;
-        getline(cin, input);
-        inputLine.str(input);
-        inputLine >> command;
+        const short bufsize = 1024;
+        char buf[bufsize];
+        cin.getline(buf, bufsize);
+		string line(buf);
+        iss.str(line);
+        iss >> command;
 
         queueMutex.lock();
 
-        if (command == "login") {
-            // Frame send: CONNECT
-            // Frame Recieved: CONNECTED
-            // ADD "Frame send" to queue, StompClient will deliver it to the Server.
-            // need to recieve back a frame in StompClient, how to do it? also, need to save frames, how to do it?
-        } else if (command == "join") {
-            // Frame send: SUBSCRIBE
-            // Frame Recieved: RECIEPT
-            // ADD "Frame send" to queue, StompClient will deliver it to the Server.
-            // need to recieve back a frame in StompClient, how to do it? also, need to save frames, how to do it?
-        } else if (command == "exit") {
-            // Frame send: UNSUBSCRIBE
-            // Frame Recieved: RECIEPT
-            // ADD "Frame send" to queue, StompClient will deliver it to the Server.
-            // need to recieve back a frame in StompClient, how to do it? also, need to save frames, how to do it?
-        } else if (command == "send") {
-            // Frame send: SEND
-            // Frame Recieved: - (ERROR if: the server cant proccess the send frame OR this client not subscribed to this topic)
-            // ADD "Frame send" to queue, StompClient will deliver it to the Server.
-            // need to recieve back a frame in StompClient, how to do it? also, need to save frames, how to do it?
-        } else if (command == "logout") {
-            // Frame send: DISCONNECT
-            // Frame Recieved: RECIEPT
-            // ADD "Frame send" to queue, StompClient will deliver it to the Server.
-            // need to recieve back a frame in StompClient, how to do it? also, need to save frames, how to do it?
+        if (command == "login" || command == "join" || command == "exit" || command == "report" ||
+        command == "summary" || command == "logout") {
+            frameQueue.push(line);
         } else {
-            // I think there is summary and maybe one more I'm not sure, so need to add more ifs.
-            // what to do if it the command isn't any of those?
+            cerr << "Unknown command. Please try again." << endl;
         }
         queueMutex.unlock();
 
