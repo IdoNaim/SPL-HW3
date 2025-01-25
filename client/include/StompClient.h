@@ -1,6 +1,8 @@
 #pragma once
+
+
 #include "../include/keyboardInput.h"
-#include "../include/ConnectionHandler.h"
+#include "../include/StompProtocol.h"
 #include "../include/event.h"
 #include <map>
 #include <queue>
@@ -10,7 +12,7 @@
 #include <memory>
 #include <mutex>
 
-class StompProtocol {
+class StompClient {
 public:
     struct User {
         std::string username;
@@ -22,8 +24,8 @@ public:
         std::vector<Event> events;
     };
 
-    StompProtocol(mutex& queueMutex, queue<string>& frameQueue);
-    ~StompProtocol();
+    StompClient();
+    ~StompClient();
 
     ConnectionHandler* getConnectionHandler();
     bool login(const std::string line);
@@ -37,7 +39,6 @@ public:
     void sortEvents(std::vector<Event>& events);
     std::string summarizeDescription(const std::string& description);
     std::string epochToDate(int date_time);
-    void processCommand(const string& line);
 
 private:
     int idGenerator();
@@ -47,7 +48,7 @@ private:
     std::map<std::string, int> subscriptions;
     bool loggedIn;
     std::queue<std::string> frameQueue;
-    std::mutex& queueMutex;
+    std::mutex queueMutex;
     std::unique_ptr<ConnectionHandler> connectionHandler;
     std::string username;
     std::list<User> users;
