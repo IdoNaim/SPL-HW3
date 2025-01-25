@@ -11,6 +11,9 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Supplier;
+import bgu.spl.net.impl.stomp.ConnectionsImpl;
+import bgu.spl.net.impl.stomp.IdGenerator;
+
 
 public class Reactor<T> implements Server<T> {
 
@@ -19,6 +22,7 @@ public class Reactor<T> implements Server<T> {
     private final Supplier<MessageEncoderDecoder<T>> readerFactory;
     private final ActorThreadPool pool;
     private Selector selector;
+    private final Connections<T> connections;
 
     private Thread selectorThread;
     private final ConcurrentLinkedQueue<Runnable> selectorTasks = new ConcurrentLinkedQueue<>();
@@ -33,6 +37,7 @@ public class Reactor<T> implements Server<T> {
         this.port = port;
         this.protocolFactory = protocolFactory;
         this.readerFactory = readerFactory;
+        this.connections = new ConnectionsImpl<>();
     }
 
     @Override
@@ -100,6 +105,8 @@ public class Reactor<T> implements Server<T> {
                 protocolFactory.get(),
                 clientChan,
                 this);
+                handler.setConnectionId(IdGenerator.getInstance().getId());
+                handler.setConnections(connections);
         clientChan.register(selector, SelectionKey.OP_READ, handler);
     }
 

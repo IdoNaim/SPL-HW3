@@ -8,10 +8,42 @@ public class UnsubscribeFrame extends Frame {
     }
 
     @Override
-    public void process(Connections<String> connections) {
+    public boolean process(Connections<String> connections) {
         // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'process'");
-        connections.unsubscribe(headers.get("id"), this.connectionId);
+        if(connections.isUserOnline(connectionId)){
+            if(connections.isUserSubbed(Integer.parseInt(headers.get("id")), this.connectionId)){
+                connections.unsubscribe(headers.get("id"), this.connectionId);
+                return false;
+            }
+            else{
+                String errorMsg=
+                "ERROR"+ '\n'+
+                "message:you are not subscribed to this channelId"+'\n'+
+                ""+'\n'+
+                 "The message:"+'\n'+
+                 "----"+'\n'+
+                 this.ogMessage+'\n'+
+                "----"+'\n'+
+                "You tried to unsubscribe from a channel you are not subscribed to"+'\n'+
+                '\u0000';
+                connections.send(connectionId, errorMsg);
+                return true;
+            }
+        }
+        else{
+            String errorMsg =
+            "ERROR"+ '\n'+
+                "message:User tried subscribing without logging in"+'\n'+
+                ""+'\n'+
+                 "The message:"+'\n'+
+                 "----"+'\n'+
+                 this.ogMessage+'\n'+
+                "----"+'\n'+
+                "client with connection ID "+connectionId+" tried unsubscribing but wasnt logged in"+'\n'+
+                '\u0000';
+                connections.send(connectionId, errorMsg);
+                return true;
+        }
     }
     
 }

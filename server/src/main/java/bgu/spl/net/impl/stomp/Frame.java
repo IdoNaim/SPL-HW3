@@ -19,25 +19,25 @@ public abstract class Frame{
         String[] message = msg.split("\n");
         command = message[0];
         int i = 1;
-        while(!message[i].equals("")){
-            if(message[i]!=":"){
+        // while(!message[i].equals("")){
+        while(i < message.length && message[i].contains(":")){
+            if(!message[i].equals(":")){
                 String[] header = message[i].split(":");
                 headers.putIfAbsent(header[0], header[1]);
             }
             i++;
         }
-        body = message[i+1];
+        //i here is "" so we need to add 1 to it
+        body = "";
+        while(i< message.length && !message[i].equals("\u0000")){
+            if(!message[i].equals("")){
+                body = body + message[i]+'\n';
+            }
+            i++;
+        }
+        body = body.substring(0, body.length()-1);
 
      }
-    // public static Frame createFrame(String message){
-    //     Frame result = new Frame();
-    //     try{
-    //     result.editFrame(message);
-    //     return result;
-
-    //     }catch(Exception e){
-    //         return null;
-    //     }
-    // }
-    public abstract void process(Connections<String> connections);
+     //the method return whether or not to terminate connection;
+    public abstract boolean process(Connections<String> connections);
 }

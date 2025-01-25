@@ -1,5 +1,6 @@
 package bgu.spl.net.impl.stomp;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -8,27 +9,33 @@ import bgu.spl.net.srv.Connections;
 
 public class ConnectionsImpl<T> implements Connections<T> {
 
-    private ConcurrentHashMap<Integer, ConnectionHandler<T>> activeUsers;
-    private ConcurrentHashMap<String, List<Integer>> subscribtions;
-    private ConcurrentHashMap<String, String> userNameToPasscode;
-    private ConcurrentHashMap<Integer,ConcurrentHashMap<String, Integer>> connectionIdChannelToSubscribtionId;
-    private ConcurrentHashMap<String, Integer> userNameToConnectionId; //maybe unneeded
-    private int index;
+    private ConcurrentHashMap<Integer, ConnectionHandler<T>> activeUsers; // should add and remove
+    private ConcurrentHashMap<String, List<Integer>> subscribtions; // should add and remove from *list*
+    private ConcurrentHashMap<String, String> userNameToPasscode; //should only add
+    private ConcurrentHashMap<Integer,List<Pair<String,Integer>>> connectionIdToChannelSubscribtionId; // should add and remove from list and hashmap
+    private ConcurrentHashMap<Integer, String> connectionIdToUserName; //should add and remove
+
     public ConnectionsImpl(){
         activeUsers = new ConcurrentHashMap<>();
         subscribtions = new ConcurrentHashMap<>();
         userNameToPasscode = new ConcurrentHashMap<>();
-        userNameToConnectionId = new ConcurrentHashMap<>();
-        connectionIdChannelToSubscribtionId = new ConcurrentHashMap<>();
-        index = 0; 
+        connectionIdToUserName = new ConcurrentHashMap<>();
+        connectionIdToChannelSubscribtionId = new ConcurrentHashMap<>();
     }
-    // public int connect(ConnectionHandler<T> ch){
-    //     // activeUsers.putIfAbsent(index, ch);
-    //     // index++;
-    //     // return index-1;
-    // }
+    public void startConnection(int connectionId, ConnectionHandler<T> ch){
+        activeUsers.putIfAbsent(connectionId, ch);
+    }
+
+    public void connect(String userName, int connectionId){
+        connectionIdToUserName.putIfAbsent(connectionId, userName);
+        
+    }
+    public void registerUser(String userName,String password){
+        userNameToPasscode.putIfAbsent(userName, password);
+    }
+    
+
     public boolean send(int connectionId, T msg){
-        //TODO: implement
         try{
         ConnectionHandler<T> ch = activeUsers.get(connectionId);
         ch.send(msg);
@@ -44,36 +51,99 @@ public class ConnectionsImpl<T> implements Connections<T> {
         List<Integer> list = subscribtions.get(channel);
         if(list != null){
             for (Integer user : list) {
-                String stompMessage = 
-                "MESSAGE"+'\n'+
-                "subscribtion:" + connectionIdChannelToSubscribtionId.get(user).get(channel)+'\n'+
-                "message-id:"+ index +'\n'+
-                "destination:/"+channel+'\n'+
-                ""+'\n'+
-                msg+'\n'+
-                '\u0000';
                 send(user, msg);
             }
-            index ++;
-        }else{
-//             String errorMsg=
-//                 "message: channerl doesnt exist"+'\n'+
-//                   ""+'\n'+
-//                      "The message:"+'\n'+
-//                      "----"+'\n'+
-//                      msg+'\n'+
-//                      "----"+'\n'+
-// ;
-//             send()
         }
     }
 
-    public void disconnect(int connectionId){
+    public void disconnect(int connectionId, T msgWithReceipt){
         //TODO: implement
-        //activeUsers.remove(connectionId);
+        ConnectionHandler<T> ch = activeUsers.get(connectionId);
+        disconnect(connectionId);
+        ch.send(msgWithReceipt);
     }
-    public String createError(String body){
+    public void disconnect(int connectionId){
+        if(activeUsers.containsKey(connectionId)){
+            activeUsers.remove(connectionId);
+        }
+        if(connectionIdToUserName.containsKey(connectionId)){
+             connectionIdToUserName.remove(connectionId);
+        }
+    }
+    public void subscribe(String channel, String subscribtionId, int connectionId){
+        int intSubId = Integer.parseInt(subscribtionId);
+        if(!subscribtions.containsKey(channel)){
+            subscribtions.putIfAbsent(channel, new ArrayList<Integer>());
+        }
+        if(!subscribtions.get(channel).contains(connectionId)){
+            subscribtions.get(channel).add(connectionId);
+            if(!connectionIdToChannelSubscribtionId.containsKey(connectionId)){
+                connectionIdToChannelSubscribtionId.putIfAbsent(connectionId, new ArrayList<Pair<String,Integer>>());
+            }
+            Pair<String,Integer> pair = new Pair<String,Integer>(channel, intSubId);
+            connectionIdToChannelSubscribtionId.get(connectionId).add(pair);
+        }
 
     }
-
+    public void unsubscribe(String subId, int connectionId){
+        int intSubId = Integer.parseInt(subId);
+        Pair<String,Integer> pair = getPairbySubId(intSubId, connectionId);
+        String channel = pair.getFirst();
+        subscribtions.get(channel).remove(connectionId);
+        connectionIdToChannelSubscribtionId.get(connectionId).remove(pair);
+        // if(connectionIdToChannelSubscribtionId.get(connectionId).isEmpty()){
+        //     connectionIdToChannelSubscribtionId.remove(connectionId);
+        // }
+    }
+    public Pair<String,Integer> getPairbySubId(int subId, int connectionId){
+        List<Pair<String,Integer>> list = connectionIdToChannelSubscribtionId.get(connectionId);
+        for(Pair<String,Integer> pair:list){
+            if(pair.getSecond() == subId ){
+                return pair;
+            }
+        }
+        return null;
+    }
+    public boolean userExists(String userName){
+        for (String name : userNameToPasscode.keySet()) {
+            if (name.equals(userName)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean userPassword(String userName, String password){
+        return userNameToPasscode.get(userName).equals(password);
+    }
+    public boolean isUserOnline(String userName){
+        for (String name : connectionIdToUserName.values()) {
+            if (name.equals(userName)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean isUserOnline(int connectionId){
+        return connectionIdToUserName.containsKey(connectionId);
+    }
+    public boolean isUserSubbed(int intSubId, int connectionId){
+        Pair<String, Integer> result = getPairbySubId(intSubId, connectionId);
+        return !(result == null);
+    }
+    public boolean isUserSubbed(String channel, int connectionId){
+        Pair<String, Integer> result = getPairbyChannel(channel, connectionId);
+        return !(result==null);
+    }
+    public Pair<String, Integer> getPairbyChannel(String channel, int connectionId){
+        List<Pair<String,Integer>> list = connectionIdToChannelSubscribtionId.get(connectionId);
+        for(Pair<String,Integer> pair:list){
+            if(pair.getFirst().equals(channel)){
+                return pair;
+            }
+        }
+        return null;
+    }
+    public List<Integer> getSubscribers(String channel){
+        return subscribtions.get(channel);
+    }
 }
