@@ -30,9 +30,12 @@ public abstract class Frame{
         //i here is "" so we need to add 1 to it
         body = "";
         while(i< message.length && !message[i].equals("\u0000")){
-            body = body + message[i]+'\n';
+            if(!message[i].equals("")){
+                body = body + message[i]+'\n';
+            }
             i++;
         }
+        body = body.substring(0, body.length()-1);
 
      }
      //the method return whether or not to terminate connection;

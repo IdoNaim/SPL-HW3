@@ -12,7 +12,7 @@ public class ConnectFrame extends Frame {
         String password = headers.get("passcode");
         String connectedMsg = 
         "CONNECTED"+'\n'+
-        "version:"+ headers.get("accept-vesion")+'\n'+
+        "version:"+ headers.get("accept-version")+'\n'+
         ""+'\n'+
         '\u0000';
         if(!connections.userExists(userName)){

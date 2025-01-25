@@ -71,17 +71,18 @@ public class ConnectionsImpl<T> implements Connections<T> {
         }
     }
     public void subscribe(String channel, String subscribtionId, int connectionId){
-        // change that if already subscribed dont add to list;
         int intSubId = Integer.parseInt(subscribtionId);
         if(!subscribtions.containsKey(channel)){
             subscribtions.putIfAbsent(channel, new ArrayList<Integer>());
         }
-        subscribtions.get(channel).add(connectionId);
-        if(!connectionIdToChannelSubscribtionId.containsKey(connectionId)){
-            connectionIdToChannelSubscribtionId.putIfAbsent(connectionId, new ArrayList<Pair<String,Integer>>());
+        if(!subscribtions.get(channel).contains(connectionId)){
+            subscribtions.get(channel).add(connectionId);
+            if(!connectionIdToChannelSubscribtionId.containsKey(connectionId)){
+                connectionIdToChannelSubscribtionId.putIfAbsent(connectionId, new ArrayList<Pair<String,Integer>>());
+            }
+            Pair<String,Integer> pair = new Pair<String,Integer>(channel, intSubId);
+            connectionIdToChannelSubscribtionId.get(connectionId).add(pair);
         }
-        Pair<String,Integer> pair = new Pair<String,Integer>(channel, intSubId);
-        connectionIdToChannelSubscribtionId.get(connectionId).add(pair);
 
     }
     public void unsubscribe(String subId, int connectionId){
