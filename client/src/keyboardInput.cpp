@@ -26,11 +26,11 @@ void keyboardInput::readFromKeyboard() {
         char buf[bufsize];
         cin.getline(buf, bufsize);
 		string line(buf);
+        iss.clear();
         iss.str(line);
         iss >> command;
 
         queueMutex.lock();
-
         if (command == "login" || command == "join" || command == "exit" || command == "report" ||
         command == "summary" || command == "logout") {
             frameQueue.push(line);

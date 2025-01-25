@@ -32,6 +32,9 @@ bool StompProtocol::login(string line){
     string command, host, portString, hostWithPort, password;
     istringstream iss(line);
     iss >> command >> hostWithPort >> username >> password;
+    if(password.empty()){
+        return false;
+    }
     User newUser;
     newUser.username = username;
     users.push_back(newUser);
@@ -72,7 +75,7 @@ void StompProtocol::processCommand(const string& line) {
     else if(command == "login"){
         bool connected = login(line);
         if(!connected)
-            cerr << "Could not connect to server" << endl;
+            cerr << "Could not connect to server. Make sure you typed correctly!" << endl;
         else{
             loggedIn = true;
             string connectFrame = createConnectFrame(line);
