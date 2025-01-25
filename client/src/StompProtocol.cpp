@@ -39,7 +39,7 @@ bool StompProtocol::login(string line){
     host = hostWithPort.substr(0, colonPosition);
     portString = hostWithPort.substr(colonPosition+1);
     short port = static_cast<short>(std::stoi(portString));
-    connectionHandler = make_unique<ConnectionHandler>(host, port);
+    connectionHandler = std::unique_ptr<ConnectionHandler>(new ConnectionHandler(host, port));
     return getConnectionHandler()->connect();
 }
 

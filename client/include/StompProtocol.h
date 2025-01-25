@@ -12,14 +12,13 @@
 
 class StompProtocol {
 public:
-    struct User {
-        std::string username;
-        std::list<struct Channel> channels;
-    };
-
     struct Channel {
         std::string channelName;
         std::vector<Event> events;
+    };
+    struct User {
+        std::string username;
+        std::list<struct Channel> channels;
     };
 
     StompProtocol(mutex& queueMutex, queue<string>& frameQueue);
