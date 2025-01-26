@@ -13,6 +13,13 @@ public class UnsubscribeFrame extends Frame {
         if(connections.isUserOnline(connectionId)){
             if(connections.isUserSubbed(Integer.parseInt(headers.get("id")), this.connectionId)){
                 connections.unsubscribe(headers.get("id"), this.connectionId);
+                String recieptId = headers.get("receipt");
+                String receipt =
+                "RECEIPT"+'\n'+
+                "receipt-id:"+recieptId+'\n'+
+                ""+'\n'+
+                '\u0000';
+                connections.send(connectionId, receipt);
                 return false;
             }
             else{

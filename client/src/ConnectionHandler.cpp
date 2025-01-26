@@ -107,3 +107,12 @@ void ConnectionHandler::close() {
 		std::cout << "closing failed: connection already closed" << std::endl;
 	}
 }
+bool ConnectionHandler::hasPendingMessages() {
+    try {
+        return socket_.available() > 0;
+    } catch (std::exception &e) {
+        std::cerr << "Error while checking pending messages: " << e.what() << std::endl;
+        return false;
+    }
+}
+

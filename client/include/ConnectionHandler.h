@@ -47,5 +47,6 @@ public:
 
 	// Close down the connection properly.
 	void close();
+	bool hasPendingMessages();
 
 }; //class ConnectionHandler

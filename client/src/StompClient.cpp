@@ -64,8 +64,9 @@ int main(int argc, char *argv[]) {
     keyboardInput.start();
     StompProtocol* protocol = new StompProtocol(queueMutex, frameQueue);
     while(true){
-
-
+        if(protocol->connectionHandler != nullptr && protocol->connectionHandler->hasPendingMessages()){
+            protocol->getMessages();
+        }
         if(!frameQueue.empty()){
             queueMutex.lock();
             string line = frameQueue.front();

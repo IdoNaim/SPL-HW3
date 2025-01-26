@@ -15,6 +15,13 @@ public class SubscribeFrame extends Frame {
         String subscriptionId = headers.get("id");
         if(connections.isUserOnline(connectionId)){
             connections.subscribe(destArray[destArray.length-1], subscriptionId, this.connectionId);
+            String recieptId = headers.get("receipt");
+            String receipt =
+            "RECEIPT"+'\n'+
+            "receipt-id:"+recieptId+'\n'+
+            ""+'\n'+
+            '\u0000';
+            connections.send(connectionId, receipt);
             return false;
         }
         else{

@@ -7,7 +7,6 @@ public class StompServer {
 
     public static void main(String[] args) {
         //TODO: implement
-        args = new String[]{"7777","tpc"};
         int port;
         try{
             port = Integer.parseInt(args[0]);

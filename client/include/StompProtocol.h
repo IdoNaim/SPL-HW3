@@ -21,6 +21,8 @@ public:
         std::list<struct Channel> channels;
     };
 
+    static std::list<User> users;
+    std::unique_ptr<ConnectionHandler> connectionHandler;
     StompProtocol(mutex& queueMutex, queue<string>& frameQueue);
     ~StompProtocol();
 
@@ -37,6 +39,9 @@ public:
     std::string summarizeDescription(const std::string& description);
     std::string epochToDate(int date_time);
     void processCommand(const string& line);
+    void getMessages();
+    Event parseMessageToEvent(const std::string& message);
+
 
 private:
     int idGenerator();
@@ -47,9 +52,8 @@ private:
     bool loggedIn;
     std::queue<std::string> frameQueue;
     std::mutex& queueMutex;
-    std::unique_ptr<ConnectionHandler> connectionHandler;
+    
     std::string username;
-    std::list<User> users;
 };
 
 
