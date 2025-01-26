@@ -28,7 +28,7 @@
             }
         },
         {
-            "label": "Build C++",
+            "label": "Build C++2",
             "type": "shell",
             "command": "g++",
             "args": [
@@ -50,7 +50,16 @@
             },
             "problemMatcher": ["$gcc"],
             "detail": "Build C++ project with MinGW"
+          },
+          {
+          "type": "shell",
+          "label": "make C++",
+          "command": "make",
+          "args": ["all"],
+          "options": {
+              "cwd": "${workspaceFolder}/client"
           }
+        }
     ],
     "version": "2.0.0"
 }

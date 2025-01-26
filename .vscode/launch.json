@@ -8,21 +8,22 @@
             "name": "Debug C++ (GDB/MinGW)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/StompClient.exe", // Path to the executable
+            "program": "${workspaceFolder}/client/bin/StompEMIClient", // Path to the executable
             "args": [],               // Add any command-line arguments for your program if needed
             "stopAtEntry": false,     // Start debugging without pausing at entry
             "cwd": "${workspaceFolder}", // Set the working directory
             "environment": [],
-            "externalConsole": true,  // Use an external console for I/O
+            "externalConsole": false,  // Use an external console for I/O
             "MIMode": "gdb",
-            "miDebuggerPath": "gdb.exe", // Path to GDB (MinGW provides this in its bin directory)
+            "miDebuggerPath": "/usr/bin/gdb", // Path to GDB (MinGW provides this in its bin directory)
             "setupCommands": [
               {
                 "description": "Enable pretty-printing for gdb",
                 "text": "-enable-pretty-printing",
                 "ignoreFailures": true
               }
-            ]
+            ],
+            "preLaunchTask": "make C++"
           }
         ,
         {
