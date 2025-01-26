@@ -12,7 +12,6 @@
 #include <list>
 #include <sstream>
 using namespace std;
-list<StompProtocol::User> StompProtocol::users;
 // map<string, int> StompProtocol::subscriptions;
 // bool StompProtocol::loggedIn = false;
 // queue<string> StompProtocol::frameQueue;
@@ -241,16 +240,16 @@ void StompProtocol::handleReportCommand(string line) {
     string channelName = parsedData.channel_name;
     vector<Event> events = parsedData.events;
     bool foundChannel = false;
-    for (User user : StompProtocol::users) {
+    for (User& user : StompProtocol::users) {
         if (user.username == username) {
-            for(Channel channel : user.channels){
+            for(Channel& channel : user.channels){
                 if(channel.channelName == channelName){
                     foundChannel = true;
                     if(channel.events.empty()){
                         channel.events = events;
                     }
                     else{
-                        for(Event event : events){
+                        for(Event& event : events){
                             channel.events.push_back(event);
                         }
                     }

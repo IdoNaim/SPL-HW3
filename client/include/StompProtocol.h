@@ -21,7 +21,7 @@ public:
         std::list<struct Channel> channels;
     };
 
-    static std::list<User> users;
+    std::list<User> users;
     std::unique_ptr<ConnectionHandler> connectionHandler;
     StompProtocol(mutex& queueMutex, queue<string>& frameQueue);
     ~StompProtocol();
