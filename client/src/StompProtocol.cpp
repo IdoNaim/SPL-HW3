@@ -376,16 +376,18 @@ void StompProtocol::getMessages(){
             string channelName = events[0].get_channel_name();
 
             bool foundChannel = false;
-            for (User user : StompProtocol::users) {
+            bool userFound = false;
+            for (User& user : StompProtocol::users) {
                 if (user.username == username) {
-                    for(Channel channel : user.channels){
+
+                    for(Channel& channel : user.channels){
                         if(channel.channelName == channelName){
                             foundChannel = true;
                             if(channel.events.empty()){
                                 channel.events = events;
                             }
                             else{
-                                for(Event event : events){
+                                for(Event& event : events){
                                     channel.events.push_back(event);
                                 }
                             }

@@ -12,56 +12,54 @@ public class StompMessagingProtocolImpl implements StompMessagingProtocol<String
     private int connectionId;
 
     public void start(int connectionId, Connections<String> connections){
-        //TODO: implement
+        
         this.connections = connections;
         this.connectionId = connectionId;
-        // String message = "Login succesful";
-        // connections.send(connectionId, message);
+        
     }
     
     public void process(String message){
-        //TODO: impelement
+        
         String command = message.split("\n")[0];
         if(command.equals("CONNECT")){
             ConnectFrame frame = new ConnectFrame(this.connectionId);
             frame.initFrame(message);
             boolean result = frame.process(connections);
-            // if(result){
-            //     shouldTerminate = true;
-            // }
+            if(result){
+                shouldTerminate = true;
+            }
 
         }else if(command.equals("DISCONNECT")){
             DisconnectFrame frame = new DisconnectFrame(this.connectionId);
             frame.initFrame(message);
             boolean result = frame.process(connections);
-            //shouldTerminate = true;
+            shouldTerminate = true;
 
         }else if(command.equals("SUBSCRIBE")){
             SubscribeFrame frame = new SubscribeFrame(this.connectionId);
             frame.initFrame(message);
             boolean result =  frame.process(connections);
-            // if(result){
-            //     shouldTerminate = true;
-            // }
+            if(result){
+                shouldTerminate = true;
+            }
 
         }else if(command.equals("UNSUBSCRIBE")){
             UnsubscribeFrame frame = new UnsubscribeFrame(this.connectionId);
             frame.initFrame(message);
             boolean result = frame.process(connections);
-            // if(result){
-            //     shouldTerminate = true;
-            // }
+            if(result){
+                shouldTerminate = true;
+            }
 
         }else if(command.equals("SEND")){
             SendFrame frame = new SendFrame(this.connectionId);
             frame.initFrame(message);
             boolean result = frame.process(connections);
-            // if(result){
-            //     shouldTerminate = true;
-            // }
+            if(result){
+                shouldTerminate = true;
+            }
         }
         else{
-           //figure out what to do in error
            String errorMsg=
            "ERROR"+'\n'+
            "message:malformed frame recieved"+'\n'+
@@ -80,7 +78,7 @@ public class StompMessagingProtocolImpl implements StompMessagingProtocol<String
     }
 
     public boolean shouldTerminate(){
-        //TODO: implement
+        
         return shouldTerminate;
     }
 
