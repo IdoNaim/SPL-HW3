@@ -26,7 +26,31 @@
             "options": {
                 "cwd": "${workspaceFolder}/server"
             }
-        }
+        },
+        {
+            "label": "Build C++",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+              "-g",                               // Debugging symbols
+              "src/StompClient.cpp",              // Main source file
+              "src/event.cpp",                    // Other source files
+              "src/keyboardInput.cpp",
+              "src/ConnectionHandler.cpp",
+              "src/StompProtocol.cpp",
+              "-o",                               // Output executable
+              "bin/StompClient.exe",
+              "-Iinclude",                        // Include directory for header files
+              "-pthread",                         // Link pthread library
+              "-lboost_system"                    // Link Boost system library
+            ],
+            "group": {
+              "kind": "build",
+              "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Build C++ project with MinGW"
+          }
     ],
     "version": "2.0.0"
 }

@@ -25,9 +25,9 @@ LDFLAGS:=-lboost_system -lpthread
 # clean:
 # 	rm -f bin/*
 
-all: clean StompEMIlient
-StompEMIlient: bin/ConnectionHandler.o bin/keyboardInput.o bin/event.o bin/StompProtocol.o bin/StompClient.o
-	g++ -o bin/StompEMIlient bin/ConnectionHandler.o bin/keyboardInput.o bin/event.o bin/StompProtocol.o bin/StompClient.o $(LDFLAGS)
+all: clean StompEMIClient
+StompEMIClient: bin/ConnectionHandler.o bin/keyboardInput.o bin/event.o bin/StompProtocol.o bin/StompClient.o
+	g++ -o bin/StompEMIClient bin/ConnectionHandler.o bin/keyboardInput.o bin/event.o bin/StompProtocol.o bin/StompClient.o $(LDFLAGS)
 
 bin/ConnectionHandler.o: src/ConnectionHandler.cpp
 	g++ $(CFLAGS) -o bin/ConnectionHandler.o src/ConnectionHandler.cpp

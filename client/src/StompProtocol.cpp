@@ -97,6 +97,8 @@ void StompProtocol::processCommand(const string& line) {
     // Further command handling (join, exit, etc.)
     else if(command == "join"){
         string subscribeFrame = createSubscribeFrame(line);
+        cout<<"sub command";
+        cout<< subscribeFrame;
         getConnectionHandler()->sendLine(subscribeFrame);
         string answer;
         getConnectionHandler()->getLine(answer);

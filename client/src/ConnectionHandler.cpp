@@ -65,11 +65,11 @@ bool ConnectionHandler::sendBytes(const char bytes[], int bytesToWrite) {
 }
 
 bool ConnectionHandler::getLine(std::string &line) {
-	return getFrameAscii(line, '\n');
+	return getFrameAscii(line, '\0');
 }
 
 bool ConnectionHandler::sendLine(std::string &line) {
-	return sendFrameAscii(line, '\n');
+	return sendFrameAscii(line, '\0');
 }
 
 
@@ -94,8 +94,9 @@ bool ConnectionHandler::getFrameAscii(std::string &frame, char delimiter) {
 
 bool ConnectionHandler::sendFrameAscii(const std::string &frame, char delimiter) {
 	bool result = sendBytes(frame.c_str(), frame.length());
-	if (!result) return false;
-	return sendBytes(&delimiter, 1);
+	return result;
+	// if (!result) return false
+	// return sendBytes(&delimiter, 1);
 }
 
 // Close down the connection properly.
