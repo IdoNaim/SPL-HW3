@@ -2,6 +2,9 @@ package bgu.spl.net.impl.stomp;
 
 public class test {
     public static void main(String[] args){
+        String body ="";
+        body = body +'\n';
+        System.out.print(body.length());
         String connect = 
         "CONNECT" +'\n'+
         "accept-version:1.2"+ '\n'+

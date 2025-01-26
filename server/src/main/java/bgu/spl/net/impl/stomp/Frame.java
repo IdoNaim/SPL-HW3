@@ -35,7 +35,9 @@ public abstract class Frame{
             }
             i++;
         }
-        body = body.substring(0, body.length()-1);
+        if(body.length()!=0){
+            body = body.substring(0, body.length()-1);
+        }
 
      }
      //the method return whether or not to terminate connection;
